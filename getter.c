@@ -11,11 +11,12 @@
 int getflag(char *c, params_ *p)
 {
 	int flag = 0;
+
 	switch (*c)
 	{
 		case '+':
 			flag = p->plus_flag = 1;
-		        break;
+			break;
 		case '-':
 			flag = p->minus_flag = 1;
 			break;
@@ -31,11 +32,11 @@ int getflag(char *c, params_ *p)
 		default:
 			printf("Unknowen option: %\n", *c);
 			return (0);
-		}
+	}
 	return (flag);
-
+}
 /**
- * getwidth - function to get width
+ * getwidth - function to print  width
  * @c: string
  * @p: the parameter struct
  * @ptr: pointer
@@ -46,6 +47,7 @@ int getflag(char *c, params_ *p)
 int *getwidth(char *c, params_ *p, va_list ptr)
 {
 	int width = 0;
+
 	if (*c == '*')
 	{
 		width = va_arg(p, int);
@@ -71,6 +73,7 @@ int *getwidth(char *c, params_ *p, va_list ptr)
 int getmodifier(char *c, params_ *p)
 {
 	int mod = 0;
+
 	switch (*c)
 	{
 		case 'h':

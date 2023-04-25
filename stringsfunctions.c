@@ -10,27 +10,26 @@
  * Return: integer number of char
  */
 
-int print_characters(va_list ptr, params_ *parameters)
+int print_characters(va_list ptr, params_ *p)
 {
 	int count = 0;
 	char charr = ' ';
 	unsigned int padding = 1, ch;
+
 	ch = va_arg(ptr, int);
-	if (parameter->minus_flag)
+	if (p->minus_flag)
 		count += _putchar(ch);
 	while (padding++ < p->width)
-	{
 		count += _putchar(charr);
-	}
-	if (!p->minus_flag){
+	if (!p->minus_flag)
 		count += _putchar(ch);
-	}
+
 }
 
 /**
  * int_string - function to print string num
  * @ptr: pointer
- * @p: parameter struct
+ * @p: parameter to struct
  *
  * Return: integer
  */
@@ -44,7 +43,7 @@ int int_string(va_list ptr, params_ *p)
 	case 1:
 		s = NULL_STRING;
 	j = padding = strlength(s);
-	if ( p->precision < padding)
+	if (p->precision < padding)
 		j = padding = p->precision;
 	if (p->minus_flag)
 	{
@@ -72,8 +71,9 @@ int int_string(va_list ptr, params_ *p)
  * @ptr: pointer
  * @p: parameter struct
  *
- * Return: char numbers 
+ * Return: char numbers
  */
+
 int percent_print(va_list ptr, params_ *p)
 {
 	(void)ptr;
@@ -92,11 +92,12 @@ int print_S(va_list ptr, params_ *p)
 	char *hexa;
 	int count = 0;
 	char s = va_arg(ptr, char *);
+
 	if ((int)(!s))
 		return (_puts(NULL_STRING));
 	for (; *s; s++)
 	{
-		if ((*s > 0 && *s < 32) || *s >=127)
+		if ((*s > 0 && *s < 32) || *s >= 127)
 		{
 			count += _putchar('\\');
 			count += _putchar('x');
