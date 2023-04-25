@@ -10,22 +10,22 @@
  * Return: total count of bytes printed 
  */
 
-int (*get_type(char* c))(va_list ptr, params_ *p)
+int(*get_type(char* c))(va_list ptr, params_ *p)
 {
-	specifier_ spec[] = {
-		{"s", print_string},
-		{"c", print_characters},
-		{"i", int_print},
-		{"d", int_print},
-		{"%", percent_print},
-		{"b", print_binary},
-		{"o", print_octal},
-		{"u", print_unsigned},
-		{"S", print_S},
-		{"R", print_rotation},
-		{"r", print_reverse},
-		{"x", print_hexa},
-		{"X", print_Upperhexa},
+specifier_ spec[] = {
+    {"s", print_string},
+{"c", print_characters},
+{"i", int_print},
+{"d", int_print},
+{"%", percent_print},
+{"b", print_binary},
+{"o", print_octal},
+{"u", print_unsigned},
+{"S", print_S},
+{"R", print_rotation},
+{"r", print_reverse},
+{"x", print_hexa},
+{"X", print_Upperhexa},
 		{"p", print_address},
 		{NULL, NULL}
 	};
