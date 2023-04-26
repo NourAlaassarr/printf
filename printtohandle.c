@@ -41,7 +41,7 @@ int print_rotation(va_list ap, params_ *p)
  * Return: no. of bytes printed
  */
 
-int print_all(char* beg, char *last, char *not)
+int print_all(char *beg, char *last, char *not)
 {
 	int sum = 0;
 
@@ -90,7 +90,7 @@ int print_reverse(va_list ap, params_ *p)
 
 int print_function(char *c, va_list p, params_ *parameters)
 {
-	int (*s)(va_list,params_ *) = get_type(c);
+	int (*s)(va_list, params_ *) = get_type(c);
 
 	if (s)
 		return (s(p, parameters));
