@@ -58,6 +58,35 @@ char *getwidth(char *c, params_ *p, va_list ptr)
 	p->width = width;
 	return (c);
 }
+/**
+ * getprecision - function get precision
+ * @c: string
+ * @p: paratmeter
+ * @ptr: pointer
+ * Return: new pointer
+ */
+
+char*getprecision(char*c, params_ *p, va_list ptr)
+{
+	int d = 0;
+	if (*c == '.')
+		return (c);
+	c++;
+
+	if (*c == '*')
+	{
+		d = va_arg(ptr, int);
+		c++;
+	}
+	else
+	{
+		while (isdigit_(*c))
+			d = d * 10 + (*c++ - '0');
+	}
+	p->precision = d;
+	return (c);
+}
+
 
 /**
  * getmodifier - find modifier is it long or short

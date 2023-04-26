@@ -33,7 +33,7 @@ int print_characters(va_list ptr, params_ *p)
  *
  * Return: integer
  */
-int int_string(va_list ptr, params_ *p)
+int print_string(va_list ptr, params_ *p)
 {
 	char *s = va_arg(ptr, char *), charr = ' ';
 	unsigned int padding = 0, count = 0, i = 0, j;
