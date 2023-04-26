@@ -101,7 +101,7 @@ int _printf(const char *format, ...);
 void init_params(params_ *p, va_list ap);
 
 /*percision.c*/
-char *getprecision(char*c, params_ *p, va_list ptr);
+char *getprecision(char *c, params_ *p, va_list ptr);
 
 /*helpingfunctions.c*/
 int isdigit_(int numb);
