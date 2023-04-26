@@ -53,7 +53,7 @@ typedef struct parameters
 typedef struct specifier
 {
 	char *speci;
-	int (*s)(va_list, params_);
+	int (*s)(va_list, params_ *);
 }specifier_;
 
 /*_put.c*/
