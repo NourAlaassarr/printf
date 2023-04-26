@@ -53,7 +53,7 @@ int *getwidth(char *c, params_ *p, va_list ptr)
 	}
 	else
 	{
-		while (isdigit_(*s))
+		while (isdigit_(*c))
 			width *= 10 + (*c++ - '0');
 	}
 	p->width = width;
