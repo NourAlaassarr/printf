@@ -6,7 +6,9 @@
 /**
  * get_type - function that finds format if avaliable
  * @c: string
- *Return: total count of bytes printed
+ * @ptr: pointer
+ * @p: parameter
+ * Return: total count of bytes printed
  */
 
 int (*get_type(char *c))(va_list ptr, params_ *p)
@@ -23,19 +25,20 @@ int (*get_type(char *c))(va_list ptr, params_ *p)
 		{"S", print_S},
 		{"R", print_rotation},
 		{"r", print_reverse},
-		{"x", print_hexa},
-		{"X", print_Upperhexa},
+		{"x", print_hex},
+		{"X", print_HEX},
 		{"p", print_address},
 		{NULL, NULL}
 	};
-int i;
-
-	for (i = 0; spec[i].speci != NULL; i++)
+	int i;
+	while (spec[i].speci)
 	{
-		if (strcmp(c, spec[i].speci) == 0)
-			return (spec[i].s);
-					}
-		return (NULL);
+		if (*s == spec[i].speci[0])
+		{
+			return (spec[i].f);
+		}
+		i++;
+	}
+	return (NULL);
 }
-
 

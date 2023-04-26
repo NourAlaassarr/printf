@@ -20,7 +20,7 @@ char *converting(long int number, int base, int flags, params_ *p)
 
 	if (!(flags & CONVERT_UNSIGNED) && number < 0)
 	{
-		n = -num;
+		n = -number;
 		sign = '-';
 	}
 	arr = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";

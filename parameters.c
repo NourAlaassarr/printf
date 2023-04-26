@@ -19,7 +19,7 @@ void add_param(params_ *par, va_list ptr)
 	par->hashtag_flag = 0;
 	par->zero_flag = 0;
 	par->width = 0;
-	par->precision = UNIT_MAX;
+	par->precision = UINT_MAX;
 	par->lmodifier = 0;
 	par->hmodifier = 0;
 	(void)ptr;

@@ -44,18 +44,18 @@ int getflag(char *c, params_ *p)
  * Return - pointer
  */
 
-int *getwidth(char *c, params_ *p, va_list ptr)
+char *getwidth(char *c, params_ *p, va_list ptr)
 {
 	int width = 0;
 
 	if (*c == '*')
 	{
-		width = va_arg(p, int);
+		width = va_arg(ptr, int);
 		c++;
 	}
 	else
 	{
-		while (isdigit_(*s))
+		while (isdigit_(*c))
 			width *= 10 + (*c++ - '0');
 	}
 	p->width = width;
