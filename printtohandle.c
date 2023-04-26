@@ -96,3 +96,4 @@ int print_function(char *c, va_list p, params_ *parameters)
 		return (s(p, parameters));
 	return (0);
 }
+

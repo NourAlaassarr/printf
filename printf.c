@@ -22,7 +22,7 @@ int _printf(const char *format, ...)
 		return (-1);
 	for (i = (char *)format; *i; i++)
 	{
-		init_params(&pr, ptr);
+		add_param(&pr, ptr);
 		if (*i != '%')
 		{
 			count += _putchar(*i);

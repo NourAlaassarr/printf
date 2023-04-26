@@ -9,7 +9,7 @@
  * @ptr: pointer
  * @p: parameter
  * Return: total count of bytes printed
- */
+ * */
 
 int (*get_type(char *c))(va_list ptr, params_ *p)
 {
@@ -41,4 +41,3 @@ int (*get_type(char *c))(va_list ptr, params_ *p)
 	}
 	return (NULL);
 }
-
