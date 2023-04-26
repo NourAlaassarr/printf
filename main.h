@@ -73,6 +73,7 @@ int (*get_type(char *s))(va_list ptr, params_ *p);
 /*getter.c*/
 int getflag(char *c, params_ *p);
 char *getwidth(char *c, params_ *p, va_list ptr);
+int getmodifier(char *s, params_t *params);
 
 /*parameters.c*/
 void add_param(params_ *par, va_list ptr);
