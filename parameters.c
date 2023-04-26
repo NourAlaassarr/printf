@@ -5,7 +5,7 @@
 
 /**
  * add_param - function to add default numb to each parameter
- * @par: parameter from struct 
+ * @par: parameter from struct
  * @ptr: pointer
  *
  * Return - void

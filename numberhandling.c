@@ -122,7 +122,7 @@ int int_print(va_list ap, params_ *p)
 	long longg;
 
 	if (p->lmodifier)
-		longg = va_arg(ap ,long);
+		longg = va_arg(ap, long);
 	else if (p->hmodifier)
 		longg = (short int)va_arg(ap, int);
 	else

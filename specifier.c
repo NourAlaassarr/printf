@@ -6,11 +6,14 @@
 /**
  * get_type - function that finds format if avaliable
  * @c: string
- *
- * Return: total count of bytes printed 
+ *Return: total count of bytes printed
  */
 
+<<<<<<< HEAD
 int(*get_type(char* c))(va_list ptr, params_ *p)
+=======
+int (*get_type(char *c))(va_list ptr, params_ *p)
+>>>>>>> c9244c60d8116b8f016c85de789bd8b3b5e748c7
 {
 specifier_ spec[] = {
     {"s", print_string},
@@ -29,12 +32,14 @@ specifier_ spec[] = {
 		{"p", print_address},
 		{NULL, NULL}
 	};
+int i;
 
-	int i;
-	for (i = 0; spec[i].speci != NULL; i++){
+	for (i = 0; spec[i].speci != NULL; i++)
+	{
 		if (strcmp(c, spec[i].speci) == 0)
-			return (spec[i].s;
+			return (spec[i].s);
 					}
-		return (NULL);}
+		return (NULL);
+}
 
 
