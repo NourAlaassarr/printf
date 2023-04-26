@@ -20,7 +20,7 @@ int _printf(const char *format, ...)
 		return (-1);
 	if (format[0] == '%' && format[1] == ' ' && !format[2])
 		return (-1);
-	for (i = (char *)format; *i; *i++)
+	for (i = (char *)format; *i; i++)
 	{
 		init_params(&pr, ptr);
 		if (*i != '%')
@@ -36,7 +36,7 @@ int _printf(const char *format, ...)
 		}
 		i = getwidth(i, &pr, ptr);
 		i = getprecision(i, &pr, ptr);
-		if (getmodifier(i, &pr))
+		if (getflag(i, &pr))
 			i++;
 		if (!get_type(i))
 			count += print_all(start, i, pr.lmodifier || pr.hmodifier ? i - 1 : 0);

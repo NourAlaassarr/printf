@@ -29,9 +29,6 @@ int getflag(char *c, params_ *p)
 		case '0':
 			flag = p->zero_flag = 1;
 			break;
-		default:
-			printf("Unknowen option: %\n", *c);
-			return (0);
 	}
 	return (flag);
 }

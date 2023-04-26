@@ -33,9 +33,9 @@ int (*get_type(char *c))(va_list ptr, params_ *p)
 	int i;
 	while (spec[i].speci)
 	{
-		if (*s == spec[i].speci[0])
+		if (*c == spec[i].speci[0])
 		{
-			return (spec[i].f);
+			return (spec[i].s);
 		}
 		i++;
 	}

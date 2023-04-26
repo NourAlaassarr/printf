@@ -97,6 +97,7 @@ char *converting(long int number, int base, int flags, params_ *p);
 
 /*printf.c*/
 int _printf(const char *format, ...);
+void init_params(params_ *p, va_list ap);
 
 /*percision.c*/
 char *getprecision(char*c, params_ *p, va_list ptr);
