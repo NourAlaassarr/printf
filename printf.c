@@ -16,12 +16,13 @@ int _printf(const char *format, ...)
 
 	va_start(ptr, format);
 
-	if (format == NULL || format[0] == '%' && !format[1])
+	if (format == NULL || ((format[0] == '%') && (!format[1])))
 		return (-1);
 	if (format[0] == '%' && format[1] == ' ' && !format[2])
 		return (-1);
 	for (i = (char *)format; *i; *i++)
 	{
+		init_params(&pr, ptr);
 		if (*i != '%')
 		{
 			count += _putchar(*i);

@@ -8,7 +8,7 @@
 
 int isdigit_(int numb)
 {
-	return (numb >= '0' && ch <= '9');
+	return (numb >= '0' && numb <= '9');
 }
 
 
@@ -48,7 +48,7 @@ int printnumbers(char *s, params_ *p)
 		s++;
 		j--;
 	}
-	if (p->precision != UNIT_MAX)
+	if (p->precision != UINT_MAX)
 		while (j++ < p->precision)
 			*--s = '0';
 	if (ne)
@@ -80,7 +80,7 @@ int print_right_shift(char *s, params_ *p)
 		s++;
 	else
 		ne = 0;
-	if ((p->plus_flag && !neg2) ||
+	if ((p->plus_flag && !ne2) ||
 		(!p->plus_flag && p->space_flag && !ne2))
 		j++;
 	if (ne && pa_ch == '0')
@@ -90,7 +90,7 @@ int print_right_shift(char *s, params_ *p)
 	else if (!p->plus_flag && p->space_flag &&
 			!ne2 && !p->unsign && p->zero_flag)
 		m += _putchar(' ');
-	while (i++ < p->width)
+	while (j++ < p->width)
 		m += _putchar(pa_ch);
 	if (ne && pa_ch == ' ')
 		m += _putchar('-');
@@ -106,7 +106,7 @@ int print_right_shift(char *s, params_ *p)
 
 
 /**
- * print_left_shif - prints number left jutified
+ * print_left_shift - prints number left jutified
  * @s: string base of number
  * @p: parameter structure
  * Return: printed chars
@@ -120,7 +120,7 @@ int print_left_shift(char *s, params_ *p)
 	if (p->zero_flag && !p->minus_flag)
 		pa_ch = '0';
 	ne = ne2 = (!p->unsign && *s == '-');
-	if (neg && j < p->width && pa_ch == '0' && !p->minus_flag)
+	if (ne && j < p->width && pa_ch == '0' && !p->minus_flag)
 		s++;
 	else
 		ne = 0;

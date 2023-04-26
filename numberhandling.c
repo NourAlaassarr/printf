@@ -93,17 +93,17 @@ int print_octal(va_list ap, params_ *p)
 {
 	unsigned long ln;
 	char *str;
-	int v;
+	int v = 0;
 
 	if (p->lmodifier)
 		ln = (unsigned long)va_arg(ap, unsigned long);
 	else if (p->hmodifier)
-		ln = (unsigned short int)va_arg(unsigned int);
+		ln = (unsigned short int)va_arg(ap, unsigned int);
 	else
-		ln = (unsigned int)va_arg(unsigned int);
-	str = converting(l, 8 CONVERT_UNSIGNED, p);
+		ln = (unsigned int)va_arg(ap, unsigned int);
+	str = converting(ln, 8, CONVERT_UNSIGNED, p);
 
-	if (p->hashtag && l)
+	if (p->hashtag_flag && ln)
 		*--str = '0';
 	p->unsign = 1;
 	return (v += printnumbers(str, p));

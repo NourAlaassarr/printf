@@ -23,7 +23,7 @@ int print_characters(va_list ptr, params_ *p)
 		count += _putchar(charr);
 	if (!p->minus_flag)
 		count += _putchar(ch);
-
+	return (count);
 }
 
 /**
@@ -36,7 +36,7 @@ int print_characters(va_list ptr, params_ *p)
 int int_string(va_list ptr, params_ *p)
 {
 	char *s = va_arg(ptr, char *), charr = ' ';
-	int padding = 0, count = 0, i = 0, j;
+	unsigned int padding = 0, count = 0, i = 0, j;
 
 	(void)p;
 	switch ((int)(!s))
@@ -47,7 +47,7 @@ int int_string(va_list ptr, params_ *p)
 		j = padding = p->precision;
 	if (p->minus_flag)
 	{
-		if (p->precision != UNIT_MAX)
+		if (p->precision != UINT_MAX)
 			for (i = 0; i < padding; i++)
 				count += _putchar(*s++);
 		else
@@ -57,7 +57,7 @@ int int_string(va_list ptr, params_ *p)
 		count += _putchar(charr);
 	if (!p->minus_flag)
 	{
-		if (p->precision != UNIT_MAX)
+		if (p->precision != UINT_MAX)
 			for (i = 0; i < padding; i++)
 				count += _putchar(*s++);
 		else
@@ -91,7 +91,7 @@ int print_S(va_list ptr, params_ *p)
 {
 	char *hexa;
 	int count = 0;
-	char s = va_arg(ptr, char *);
+	char *s = va_arg(ptr, char *);
 
 	if ((int)(!s))
 		return (_puts(NULL_STRING));
@@ -101,7 +101,7 @@ int print_S(va_list ptr, params_ *p)
 		{
 			count += _putchar('\\');
 			count += _putchar('x');
-			hex = converting(*s, 16, 0, p);
+			hexa = converting(*s, 16, 0, p);
 			if (!hexa[1])
 				count += _putchar('0');
 			count += _puts(hexa);
