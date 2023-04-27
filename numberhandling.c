@@ -52,7 +52,7 @@ int print_HEX(va_list types, char buff[],
 int print_binary(va_list types, char buff[],
 	int flags, int width, int precision, int size)
 {
-	unsigned int n, m, j, sum;
+	unsigned int m, n, j, sum;
 	unsigned int a[32];
 	int count;
 
@@ -63,7 +63,7 @@ int print_binary(va_list types, char buff[],
 	UNUSED(size);
 
 	n = va_arg(types, unsigned int);
-	m = 2147483648; /* (2 ^ 31) */
+	m = 2147483648;
 	a[0] = n / m;
 	for (j = 1; j < 32; j++)
 	{
