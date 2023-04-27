@@ -1,69 +1,77 @@
 #include "main.h"
 #include <stdarg.h>
 #include <stdio.h>
-#include <limits.h>
+#include <unistd.h>
+
 /**
- * print_characters - function used to print number of char
+ * print_characters - Prints a char
  * @ptr: pointer
- * @p: parameter to struct
- *
- * Return: integer number of char
+ * @buffer:array to be printed
+ * @flag:flag activated
+ * @wid: Width
+ * @precision: Precision udsed
+ * @s: size
+ * Return: printed char
  */
-
-int print_characters(va_list ptr, params_ *p)
+int print_characters(va_list ptr, char arr[], int flag, int wid, int precision, int s)
 {
-	int count = 0;
-	char charr = ' ';
-	unsigned int padding = 1, ch;
-
-	ch = va_arg(ptr, int);
-	if (p->minus_flag)
-		count += _putchar(ch);
-	while (padding++ < p->width)
-		count += _putchar(charr);
-	if (!p->minus_flag)
-		count += _putchar(ch);
-	return (count);
+        char ch = va_arg(ptr, int);
+        return (write_characters(ch, arr, flag, wid, precision, s));
 }
-
 /**
- * int_string - function to print string num
+ * print_string - Prints a string
  * @ptr: pointer
- * @p: parameter to struct
- *
- * Return: integer
+ * @bufr:array to be printed
+ * @flag:flag activated
+ * @w: Width
+ * @precision: Precision udsed
+ * @sz: size
+ * Return: printed char
  */
-int print_string(va_list ptr, params_ *p)
+int print_string (va_list ptr, char bfr[],
+	int flag, int w, int precision, int sz)
 {
-	char *s = va_arg(ptr, char *), charr = ' ';
-	unsigned int padding = 0, count = 0, i = 0, j;
+	int len = 0, i;
+	char *str = va_arg(ptr, char *);
 
-	(void)p;
-	switch ((int)(!s))
-	case 1:
-		s = NULL_STRING;
-	j = padding = strlength(s);
-	if (p->precision < padding)
-		j = padding = p->precision;
-	if (p->minus_flag)
+	UNUSED(bfr);
+	UNUSED(flag);
+	UNUSED(w);
+	UNUSED(precision);
+	UNUSED(sz);
+
+	if (str == NULL)
 	{
-		if (p->precision != UINT_MAX)
-			for (i = 0; i < padding; i++)
-				count += _putchar(*s++);
-		else
-			count += _puts(s);
+		str = "(null)";
+		if (precision >= 6)
+			str = "      ";
 	}
-	while (j++ < p->width)
-		count += _putchar(charr);
-	if (!p->minus_flag)
+
+	while (str[len] != '\0')
+		len++;
+
+	if (precision >= 0 && precision < len)
+		len = precision;
+
+	if (w > len)
 	{
-		if (p->precision != UINT_MAX)
-			for (i = 0; i < padding; i++)
-				count += _putchar(*s++);
+		if (flag & MINUS_FLAG)
+		{
+			write(1, &str[0], len);
+			for (i = w - len; i > 0; i--)
+				write(1, " ", 1);
+			return (w);
+		}
 		else
-			count += _puts(s);
+		{
+			for (i = w - len; i > 0; i--)
+				write(1, " ", 1);
+			write(1, &str[0], len);
+			return (w);
+		}
 	}
-	return (count);
+
+	return (write(1, str, len));
 }
 
 /**
@@ -73,41 +81,14 @@ int print_string(va_list ptr, params_ *p)
  *
  * Return: char numbers
  */
-
-int percent_print(va_list ptr, params_ *p)
+int print_percent(va_list ptr, char arr[],
+	int flag, int wid, int precision, int s)
 {
-	(void)ptr;
-	(void)p;
-	return (_putchar('%'));
-}
-/**
- * print_S - specifier to handel
- * @ptr: pointer
- * @p: parameter struct
- *
- * Return: char number
- */
-int print_S(va_list ptr, params_ *p)
-{
-	char *hexa;
-	int count = 0;
-	char *s = va_arg(ptr, char *);
-
-	if ((int)(!s))
-		return (_puts(NULL_STRING));
-	for (; *s; s++)
-	{
-		if ((*s > 0 && *s < 32) || *s >= 127)
-		{
-			count += _putchar('\\');
-			count += _putchar('x');
-			hexa = converting(*s, 16, 0, p);
-			if (!hexa[1])
-				count += _putchar('0');
-			count += _puts(hexa);
-		}
-		else
-			count += _putchar(*s);
-	}
-	return (count);
+	UNUSED(ptr);
+	UNUSED(arr);
+	UNUSED(flag);
+	UNUSED(wid);
+	UNUSED(precision);
+	UNUSED(s);
+	return (write(1, "%%", 1));
 }

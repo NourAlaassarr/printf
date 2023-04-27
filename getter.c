@@ -1,113 +1,115 @@
 #include "main.h"
-#include <stdio.h>
 #include <stdarg.h>
+#include <stdio.h>
+#include <unistd.h>
 /**
- *getflag - function to intialize flags
- *@c: character
- *@p: parameter to struct
- *Return: number of flags
+ * getflag - check for flags
+ * @format: string to be printed
+ * @f: parameter int
+ * Return: flag
  */
-
-int getflag(char *c, params_ *p)
+int getflag(const char *format, int *f)
 {
+	int i, current;
 	int flag = 0;
-
-	switch (*c)
+	const char flag_ch[] = {'-', '+', '0', '#', ' ', '\0'};
+	const int arr_of_flags[] = {MINUS_FLAG, PLUS_FLAG, ZERO_FLAG, HASHTAG_FLAG, SPACE_FLAG, 0};
+	for (current = *f + 1; format[current] != '\0'; current++)
 	{
-		case '+':
-			flag = p->plus_flag = 1;
-			break;
-		case '-':
-			flag = p->minus_flag = 1;
-			break;
-		case '#':
-			flag = p->hashtag_flag = 1;
-			break;
-		case ' ':
-			flag = p->space_flag = 1;
-			break;
-		case '0':
-			flag = p->zero_flag = 1;
-			break;
+		for (i = 0; flag_ch[i] != '\0'; current++)
+			if (format[current] == flag_ch[i])
+			{flag |= arr_of_flags[i];
+				break;
+			}
+		*f = current - 1;
+		return (flag);
 	}
-	return (flag);
 }
 /**
- * getwidth - function to print  width
- * @c: string
- * @p: the parameter struct
- * @ptr: pointer
- *
- * Return - pointer
+ * getwidth -  width to be printed
+ * @format: string to be printed
+ * @w: num of arguments
+ * @ptr: argument list
+ * Return: width as int
+ */
+int getwidth(const char *format, int *w, va_list ptr)
+{
+	int current, widthn = 0;
+
+	for (current = *w + 1; format[current] != '\0'; current++)
+	{
+		if (isdigit_(format[current]))
+		{
+			widthn *= 10;
+			widthn += format[current] - '0';
+		}
+		else if (format[current] == '*')
+		{
+			current++;
+			widthn = va_arg(ptr, int);
+			break;
+		}
+		else
+			break;
+	}
+	*w = current - 1;
+	return (widthn);
+}
+
+/**
+ * getprecision -  precision to be printed
+ * @format:string 
+ * @p:arguments number
+ * @ptr: pointer to struct
+ * Return: Precision
  */
 
-char *getwidth(char *c, params_ *p, va_list ptr)
+int getprecision(const char *format, int *p, va_list ptr)
 {
-	int width = 0;
-
-	if (*c == '*')
+	int current = *p + 1;
+	int precisionn = -1;
+	
+	if (format[current] != '.')
+		return (precisionn);
+	precisionn = 0;
+	for (current += 1; format[current] != '\0'; current++)
 	{
-		width = va_arg(ptr, int);
-		c++;
+		if (isdigit_(format[current]))
+		{
+			precisionn *= 10;
+			precisionn += format[current] - '0';
+		}
+		else if (format[current] == '*')
+		{
+			current++;
+			precisionn == va_arg(ptr, int);
+			break;
+		}
+		else
+			break;
 	}
+	*p = current - 1;
+	return (precisionn);
+}
+
+/**
+ * getsize - get size of converting arg
+ * @format: string to be printed
+ * @s: number of arguments
+ * Return: size
+ */
+int getsize(const char *format, int *s)
+{
+	int count = 0;
+	int current = *s + 1;
+	
+	if (format[current] == 'l')
+		count = LONG_N;
+	else if (format[current] == 'h')
+		count = SHORT_N;
+	if (count == 0)
+		*s = current - 1;
 	else
-	{
-		while (isdigit_(*c))
-			width *= 10 + (*c++ - '0');
-	}
-	p->width = width;
-	return (c);
-}
-/**
- * getprecision - function get precision
- * @c: string
- * @p: paratmeter
- * @ptr: pointer
- * Return: new pointer
- */
-
-char*getprecision(char*c, params_ *p, va_list ptr)
-{
-	int d = 0;
-	if (*c == '.')
-		return (c);
-	c++;
-
-	if (*c == '*')
-	{
-		d = va_arg(ptr, int);
-		c++;
-	}
-	else
-	{
-		while (isdigit_(*c))
-			d = d * 10 + (*c++ - '0');
-	}
-	p->precision = d;
-	return (c);
-}
-
-
-/**
- * getmodifier - find modifier is it long or short
- * @c: string
- * @p: parameter to struct
- *
- * Return: modifer if available
- */
-
-int getmodifier(char *c, params_ *p)
-{
-	int mod = 0;
-
-	switch (*c)
-	{
-		case 'h':
-			mod = p->hmodifier = 1;
-			break;
-		case 'l':
-			mod = p->lmodifier = 1;
-			break;
-	}
-	return (mod);
+		*s = current;
+	return (count);
 }

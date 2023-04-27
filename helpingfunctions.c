@@ -1,5 +1,7 @@
 #include "main.h"
-
+#include <stdarg.h>
+#include <stdio.h>
+#include <unistd.h>
 /**
  * isdigit_ - checks for digits
  * @numb: char to check
@@ -8,129 +10,82 @@
 
 int isdigit_(int numb)
 {
-	return (numb >= '0' && numb <= '9');
+	if (numb >= '0' && numb <= '9')
+		return (1);
+	return (0);
 }
 
-
 /**
- * _strlength - calculates length of a string
- * @str: string to check
- * Return: length of string
+ * hexa_appened - Append  hexadecimal to array
+ * @arr: Array of characters
+ * @j: start appending
+ * @asci: ASSCI code num
+ * Return: int num 3
  */
 
-int strlength(char *str)
+int hexa_appened(char asci, char arr[], int j)
 {
-	int j;
+	char map_to[] = "0123456789ABCDEF";
+	
+	if (asci < 0)
+		asci *= -1;
 
-	j = 0;
-	while (*str++)
-		j++;
-	return (j);
+	arr[j++] = '\\';
+	arr[j++] = 'x';
+
+	arr[j++] = map_to[asci / 16];
+	arr[j] = map_to[asci % 16];
+
+	return (3);
 }
 
-
 /**
- * printnumber - prints a number
- * @s: string base of the number
- * @p: parameter structure
- * Return: printed chars
+ * checkifprintable - function to check if char is printable
+ * @p: character to check
+ *
+ * Return: 1 if c is printable, 0 otherwise
  */
-
-int printnumbers(char *s, params_ *p)
+ 
+int checkifprintable(char p)
 {
-	unsigned int j = strlength(s);
-	int ne = (!p->unsign && *s == '-');
+	if (p >= 32 && p < 127)
+		return (1);
 
-	if (!p->precision && *s == '0' && !s[1])
-		s = "";
-	if (ne)
-	{
-		s++;
-		j--;
-	}
-	if (p->precision != UINT_MAX)
-		while (j++ < p->precision)
-			*--s = '0';
-	if (ne)
-		*--s = '-';
-
-	if (!p->minus_flag)
-		return (print_right_shift(s, p));
-	else
-		return (print_left_shift(s, p));
+	return (0);
 }
 
-
 /**
- * print_right_shift - prints number right justified
- * @s: string base of number
- * @p: parameter structure
- * Return: printed chars
+ * convertint_num - convert data type 
+ * @n: Num to convert
+ * @s: data type to be converted to
+ *
+ * Return: value of converting
  */
 
-int print_right_shift(char *s, params_ *p)
+long int converting_num(long int n, int s)
 {
-	unsigned int m = 0, ne, ne2, j = strlength(s);
-	char pa_ch = ' ';
+	if (s == LONG_N)
+		return (n);
+	else if (s == SHORT_N)
+		return ((short)n);
 
-	if (p->zero_flag && !p->minus_flag)
-		pa_ch = '0';
-	ne = ne2 = (!p->unsign && *s == '-');
-	if (ne && j < p->width && pa_ch == '0' && !p->minus_flag)
-		s++;
-	else
-		ne = 0;
-	if ((p->plus_flag && !ne2) ||
-		(!p->plus_flag && p->space_flag && !ne2))
-		j++;
-	if (ne && pa_ch == '0')
-		m += _putchar('-');
-	if (p->plus_flag && !ne2 && pa_ch == '0' && !p->unsign)
-		m += _putchar('+');
-	else if (!p->plus_flag && p->space_flag &&
-			!ne2 && !p->unsign && p->zero_flag)
-		m += _putchar(' ');
-	while (j++ < p->width)
-		m += _putchar(pa_ch);
-	if (ne && pa_ch == ' ')
-		m += _putchar('-');
-	if (p->plus_flag && !ne2 && pa_ch == ' ' && !p->unsign)
-		m += _putchar('+');
-	else if (!p->plus_flag && p->space_flag &&
-			!ne2 && !p->unsign && !p->zero_flag)
-		m += _putchar(' ');
-	m += _puts(s);
-	return (m);
-
+	return ((int)n);
 }
 
-
 /**
- * print_left_shift - prints number left jutified
- * @s: string base of number
- * @p: parameter structure
- * Return: printed chars
+ * converting_unsign - convert to another size
+ * @n: Num to convert
+ * @s: data type to be converted to
+ *
+ * Return: value of converting
  */
 
-int print_left_shift(char *s, params_ *p)
+long int converting_unsign(unsigned long int n, int s)
 {
-	unsigned int m = 0, ne, ne2, j = strlength(s);
-	char pa_ch = ' ';
+	if (s == LONG_N)
+		return (n);
+	else if (s == SHORT_N)
+		return ((unsigned short)n);
 
-	if (p->zero_flag && !p->minus_flag)
-		pa_ch = '0';
-	ne = ne2 = (!p->unsign && *s == '-');
-	if (ne && j < p->width && pa_ch == '0' && !p->minus_flag)
-		s++;
-	else
-		ne = 0;
-
-	if (p->plus_flag && !ne2 && !p->unsign)
-		m += _putchar('+'), j++;
-	else if (p->space_flag && !ne2 && !p->unsign)
-		m += _putchar(' '), j++;
-	m += _puts(s);
-	while (j++ < p->width)
-		m += _putchar(pa_ch);
-	return (m);
+	return ((unsigned int)n);
 }

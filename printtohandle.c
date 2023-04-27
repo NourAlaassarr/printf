@@ -1,99 +1,186 @@
 #include "main.h"
+#include <stdarg.h>
+#include <stdio.h>
+#include <unistd.h>
 
 /**
- * print_rotation - prints in rotation
- * @ap: pointer to argument
- * @p: parameter structure
- * Return: printed bytes
+ * print_address - print pointer value
+ * @ptr: pointer to arg
+ * @bfr: array to be printed
+ * @flag: activated flag
+ * @w: width
+ * @pre: Precision 
+ * @sz: size
+ * Return: chars to be printed
  */
 
-int print_rotation(va_list ap, params_ *p)
+int print_address(va_list ptr, char bfr[],
+	int flag, int w, int pre, int sz)
 {
-	int i, ind;
-	int c = 0;
-	char arr[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
-	char *a = va_arg(ap, char*);
-	(void)p;
+	char es = 0, padding = ' ';
+	int indentation = BUFF_SIZE - 2, length = 2, p_start = 1; 
+	unsigned long address;
+	char map_to[] = "0123456789abcdef";
+	void *pointeradrs = va_arg(ptr, void *);
 
-	i = 0;
-	ind = 0;
-	while (a[i])
+	UNUSED(w);
+	UNUSED(sz);
+
+	if (pointeradrs == NULL)
+		return (write(1, "(nil)", 5));
+
+	bfr[BUFF_SIZE - 1] = '\0';
+	UNUSED(pre);
+
+	address = (unsigned long)pointeradrs;
+
+	while (address > 0)
 	{
-		if ((a[i] >= 'A' && a[i] <= 'Z')
-				|| (a[i] >= 'a' && a[i] <= 'z'))
-		{
-			ind = a[i] - 65;
-			c += _putchar(arr[ind]);
-		}
+		bfr[indentation--] = map_to[address % 16];
+		address /= 16;
+		length++;
+	}
+
+	if ((flag & ZERO_FLAG) && !(flag & MINUS_FLAG))
+		padding = '0';
+	if (flag & PLUS_FLAG)
+		es = '+', length++;
+	else if (flag & SPACE_FLAG)
+		es = ' ', length++;
+
+	indentation++;
+
+	return (pointer_writing(bfr, indentation, length,
+		w, flag, padding, es, p_start));
+}
+/**
+ * non_print - Print ascii code
+ * @ptr: pointer to arg
+ * @bfr: array to be printed
+ * @flag: activated flag
+ * @w: width
+ * @pre: Precision
+ * @sz: size
+ * Return: chars to be printed
+ */
+int non_print(va_list ptr, char bfr[],
+	int flag, int w, int pre, int sz)
+{
+	int i = 0, biteoffset = 0;
+	char *stringg = va_arg(ptr, char *);
+
+	UNUSED(flag);
+	UNUSED(w);
+	UNUSED(pre);
+	UNUSED(sz);
+
+	if (stringg == NULL)
+		return (write(1, "(null)", 6));
+
+	while (stringg[i] != '\0')
+	{
+		if (checkifprintable(stringg[i]))
+			bfr[i + biteoffset] = stringg[i];
 		else
-			c += _putchar(a[i]);
+			biteoffset += hexa_appened(stringg[i], bfr, i + biteoffset);
+
 		i++;
 	}
-	return (c);
+
+	bfr[i + biteoffset] = '\0';
+
+	return (write(1, bfr, i + biteoffset));
 }
 
-
 /**
- * print_all - prints a range of char addresses
- * @beg: starting address
- * @last: stopping address
- * @not: except address
- * Return: no. of bytes printed
+ * print_reverse - Print reversed 
+ * @ptr: pointer to arg
+ * @bfr: array to be printed
+ * @flag: activated flag
+ * @w: width
+ * @pre: Precision
+ * @sz: size
+ * Return: chars to be printed
  */
-
-int print_all(char *beg, char *last, char *not)
+int print_reverse(va_list ptr, char bfr[],
+	int flag, int w, int pre, int sz)
 {
+	char *stringg;
+	int i, count = 0;
+
+	UNUSED(bfr);
+	UNUSED(flag);
+	UNUSED(w);
+	UNUSED(sz);
+
+	stringg = va_arg(ptr, char *);
+
+	if (stringg == NULL)
+	{
+		UNUSED(pre);
+
+		stringg = ")Null(";
+	}
+	for (i = 0; stringg[i]; i++)
+		;
+
+	for (i = i - 1; i >= 0; i--)
+	{
+		char tmp = stringg[i];
+
+		write(1, &tmp, 1);
+		count++;
+	}
+	return (count);
+}
+/**
+ * print_rotation - Print reversed
+ * @ptr: pointer to arg
+ * @bfr: array to be printed
+ * @flag: activated flag
+ * @w: width
+ * @pre: Precision
+ * @sz: size
+ * Return: chars to be printed
+ */
+int print_rotation(va_list ptr, char bfr[],
+	int flag, int w, int pre, int sz)
+{
+	char ch;
+	char *stringg;
+	unsigned int i, j;
 	int sum = 0;
+	char rotation[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
+	char input[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-	while (beg <= last)
+
+	stringg = va_arg(ptr, char *);
+	UNUSED(bfr);
+	UNUSED(flag);
+	UNUSED(w);
+	UNUSED(pre);
+	UNUSED(sz);
+
+	if (stringg == NULL)
+		stringg = "(AHYY)";
+	for (i = 0; stringg[i]; i++)
 	{
-		if (beg != not)
-			sum += _putchar(*beg);
-		beg++;
+		for (j = 0; input[j]; j++)
+		{
+			if (input[j] == stringg[i])
+			{
+				ch = rotation[j];
+				write(1, &ch, 1);
+				sum++;
+				break;
+			}
+		}
+		if (!input[j])
+		{
+			ch = stringg[i];
+			write(1, &ch, 1);
+			sum++;
+		}
 	}
 	return (sum);
 }
-
-
-/**
- * print_reverse - prints in reverse
- * @ap: pointer to argument
- * @p: parameter structure
- * Return: bytes in reverse
- */
-
-int print_reverse(va_list ap, params_ *p)
-{
-	int len, sum = 0;
-	char *s = va_arg(ap, char *);
-	(void)p;
-
-	if (s)
-	{
-		for (len = 0; *s; s++)
-			len++;
-		s--;
-		for (; len > 0; len--, s--)
-			sum += _putchar(*s);
-	}
-	return (sum);
-}
-
-
-/**
- * print_function - looks for specifier
- * @c: string
- * @p: pointer to argument
- * @parameters: parameters structure
- * Return: printed bytes
- */
-
-int print_function(char *c, va_list p, params_ *parameters)
-{
-	int (*s)(va_list, params_ *) = get_type(c);
-
-	if (s)
-		return (s(p, parameters));
-	return (0);
-}
-
