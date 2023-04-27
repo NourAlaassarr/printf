@@ -1,49 +1,67 @@
 #include "main.h"
 
+void print_buffer(char buff[], int *buff_ind);
+
 /**
- * _printf - main printf function
- * @format: any format
- * Return: no. of bytes printed
+ * _printf - Printf main function
+ * @format: format of priting
+ * Return: Printed chars
  */
 
 int _printf(const char *format, ...)
 {
-	int count = 0;
-	va_list ptr;
-	char *i, *start;
+	int j, printed = 0, printed_chars = 0;
+	int flags, width, precision, size, buff_ind = 0;
+	va_list list;
+	char buffer[BUFF_SIZE];
 
-	params_ pr = ADD_PARAM;
-
-	va_start(ptr, format);
-
-	if (format == NULL || ((format[0] == '%') && (!format[1])))
+	if (format == NULL)
 		return (-1);
-	if (format[0] == '%' && format[1] == ' ' && !format[2])
-		return (-1);
-	for (i = (char *)format; *i; i++)
+
+	va_start(list, format);
+
+	for (j = 0; format && format[j] != '\0'; i++)
 	{
-		add_param(&pr, ptr);
-		if (*i != '%')
+		if (format[j] != '%')
 		{
-			count += _putchar(*i);
-			continue;
+			buffer[buff_ind++] = format[j];
+			if (buff_ind == BUFF_SIZE)
+				print_buffer(buffer, &buff_ind);
+			/* write(1, &format[i], 1);*/
+			printed_chars++;
 		}
-		start = i;
-		i++;
-		while (getflag(i, &pr))
-		{
-			i++;
-		}
-		i = getwidth(i, &pr, ptr);
-		i = getprecision(i, &pr, ptr);
-		if (getflag(i, &pr))
-			i++;
-		if (!get_type(i))
-			count += print_all(start, i, pr.lmodifier || pr.hmodifier ? i - 1 : 0);
 		else
-			count += print_function(i, ptr, &pr);
+		{
+			print_buffer(buffer, &buff_ind);
+			flags = getflag(format, &j);
+			width = getwidth(format, &j, list);
+			precision = getprecision(format, &j, list);
+			size = getsize(format, &j);
+			++j;
+			printed = handle_print(format, &j, list, buffer,
+				flags, width, precision, size);
+			if (printed == -1)
+				return (-1);
+			printed_chars += printed;
+		}
 	}
-	_putchar(BUF_FLUSH);
-	va_end(ptr);
-	return (count);
+
+	print_buffer(buffer, &buff_ind);
+
+	va_end(list);
+
+	return (printed_chars);
+}
+
+/**
+ * print_buffer - Prints contents of the buffer if it exists
+ * @buff: Array of chars
+ * @buff_ind: Index at which to add next char, representing the length.
+ */
+void print_buffer(char buff[], int *buff_ind)
+{
+	if (*buff_ind > 0)
+		write(1, &buff[0], *buff_ind);
+
+	*buff_ind = 0;
 }
