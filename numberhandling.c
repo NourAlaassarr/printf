@@ -2,130 +2,171 @@
 
 /**
  * print_hex - prints lowercase unsigned hex numbers
- * @ap: pointer to argument
- * @p: parameters struct
+ * @types: arguments list
+ * @buff: printing array
+ * @flags: active flags
+ * @width: width calculated
+ * @precision: precision calculated
+ * @size: size calculated
  * Return: printed nummbers
  */
 
-int print_hex(va_list ap, params_ *p)
+int print_hex(va_list types, char buff[],
+	int flags, int width, int precision, int size);
 {
-	unsigned long l;
-	int ch = 0;
-	char *str;
-
-	if (p->lmodifier)
-		l = (unsigned long)va_arg(ap, unsigned long);
-	else if (p->hmodifier)
-		l = (unsigned short int)va_arg(ap, unsigned int);
-	else
-		l = (unsigned int)va_arg(ap, unsigned int);
-
-	str = converting(l, 16, CONVERT_UNSIGNED | CONVERT_LOWERCASE, p);
-	if (p->hashtag_flag && l)
-	{
-		*--str = 'x';
-		*--str = '0';
-	}
-	p->unsign = 1;
-	return (ch += printnumbers(str, p));
+	return (print_hexanum(types, "0123456789abcdef", buff,
+		flags, 'x', width, precision, size));
 }
 
 
 /**
  * print_HEX - prints uppercase unsigned hex numbers
- * @ap: pointer to argument
- * @p: parameters struct
+ * @types: arguments list
+ * @buff: printing array
+ * @flags: active flags
+ * @width: width calculated
+ * @precision: precision calculated
+ * @size: size calculated
  * Return: printed nummbers
  */
 
-int print_HEX(va_list ap, params_ *p)
+int print_HEX(va_list types, char buff[],
+	int flags, int width, int precision, int size);
 {
-	unsigned long l;
-	int ch = 0;
-	char *str;
-
-	if (p->lmodifier)
-		l = (unsigned long)va_arg(ap, unsigned long);
-	else if (p->hmodifier)
-		l = (unsigned short int)va_arg(ap, unsigned int);
-	else
-		l = (unsigned int)va_arg(ap, unsigned int);
-
-	str = converting(l, 16, CONVERT_UNSIGNED, p);
-	if (p->hashtag_flag && l)
-	{
-		*--str = 'X';
-		*--str = '0';
-	}
-	p->unsign = 1;
-	return (ch += printnumbers(str, p));
+	return (print_hexanum(types, "0123456789ABCDEF", buff,
+		flags, 'X', width, precision, size));
 }
 
 
 /**
  * print_binary - prints binary unsigned numbers
- * @ap: pointer to argument
- * @p: parameter structure
- * Return: printed binary numbers
+ * @types: arguments list
+ * @buff: printing array
+ * @flags: active flags
+ * @width: width calculated
+ * @precision: precision calculated
+ * @size: size calculated
+ * Return: printed nummbers
  */
 
-int print_binary(va_list ap, params_ *p)
+int print_binary(va_list types, char buff[],
+	int flags, int width, int precision, int size)
 {
-	unsigned int m = va_arg(ap, unsigned int);
-	char *str = converting(m, 2, CONVERT_UNSIGNED, p);
-	int c = 0;
+	unsigned int n, m, j, sum;
+	unsigned int a[32];
+	int count;
 
-	if (p->hashtag_flag && m)
-		*--str = '0';
-	p->unsign = 1;
-	return (c += printnumbers(str, p));
+	UNUSED(buff);
+	UNUSED(flags);
+	UNUSED(width);
+	UNUSED(precision);
+	UNUSED(size);
+
+	n = va_arg(types, unsigned int);
+	m = 2147483648; /* (2 ^ 31) */
+	a[0] = n / m;
+	for (j = 1; j < 32; j++)
+	{
+		m /= 2;
+		a[j] = (n / m) % 2;
+	}
+	for (i = 0, sum = 0, count = 0; i < 32; i++)
+	{
+		sum += a[j];
+		if (sum || j == 31)
+		{
+			char z = '0' + a[j];
+
+			write(1, &z, 1);
+			count++;
+		}
+	}
+	return (count);
 }
 
 
 /**
  * print_octal - prints octal unsigned numbers
- * @ap: pointer to argument
- * @p: parameter structure
- * Return: printed octal numbers
+ * @types: arguments list
+ * @buff: printing array
+ * @flags: active flags
+ * @width: width calculated
+ * @precision: precision calculated
+ * @size: size calculated
+ * Return: printed nummbers
  */
 
-int print_octal(va_list ap, params_ *p)
+int print_octal(va_list types, char buff[],
+	int flags, int width, int precision, int size);
 {
-	unsigned long ln;
-	char *str;
-	int v = 0;
+	int j = BUFF_SIZE - 2;
+	unsigned long int num = va_arg(types, unsigned long int);
+	unsigned long int init_num = num;
 
-	if (p->lmodifier)
-		ln = (unsigned long)va_arg(ap, unsigned long);
-	else if (p->hmodifier)
-		ln = (unsigned short int)va_arg(ap, unsigned int);
-	else
-		ln = (unsigned int)va_arg(ap, unsigned int);
-	str = converting(ln, 8, CONVERT_UNSIGNED, p);
+	UNUSED(width);
 
-	if (p->hashtag_flag && ln)
-		*--str = '0';
-	p->unsign = 1;
-	return (v += printnumbers(str, p));
+	num = converting_unsign(num, size);
+
+	if (num == 0)
+		buff[j--] = '0';
+
+	buff[BUFF_SIZE - 1] = '\0';
+
+	while (num > 0)
+	{
+		buff[j--] = (num % 8) + '0';
+		num /= 8;
+	}
+
+	if (flags & F_HASH && init_num != 0)
+		buff[j--] = '0';
+
+	j++;
+
+	return (write_unsigned(0, j, buff, flags, width, precision, size));
 }
 
 
 /**
  * int_print - function to print int
- * @ap: pointer
- * @p: parameter structure
- * Return: int
+ * @types: arguments list
+ * @buff: printing array
+ * @flags: active flags
+ * @width: width calculated
+ * @precision: precision calculated
+ * @size: size calculated
+ * Return: printed nummbers
  */
 
-int int_print(va_list ap, params_ *p)
+int int_print(va_list types, char buff[],
+	int flags, int width, int precision, int size);
 {
-	long longg;
+	int j = BUFF_SIZE - 2;
+	int is_negative = 0;
+	long int n = va_arg(types, long int);
+	unsigned long int num;
 
-	if (p->lmodifier)
-		longg = va_arg(ap, long);
-	else if (p->hmodifier)
-		longg = (short int)va_arg(ap, int);
-	else
-		longg = (int)va_arg(ap, int);
-	return (printnumbers(converting(longg, 10, 0, p), p));
+	n = converting_num(n, size);
+
+	if (n == 0)
+		buffer[j--] = '0';
+
+	buff[BUFF_SIZE - 1] = '\0';
+	num = (unsigned long int)n;
+
+	if (n < 0)
+	{
+		num = (unsigned long int)((-1) * n);
+		is_negative = 1;
+	}
+
+	while (num > 0)
+	{
+		buff[j--] = (num % 10) + '0';
+		num /= 10;
+	}
+
+	j++;
+
+	return (write_numb(is_negative, j, buff, flags, width, precision, size));
 }
