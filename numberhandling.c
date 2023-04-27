@@ -12,7 +12,7 @@
  */
 
 int print_hex(va_list types, char buff[],
-	int flags, int width, int precision, int size);
+	int flags, int width, int precision, int size)
 {
 	return (print_hexanum(types, "0123456789abcdef", buff,
 		flags, 'x', width, precision, size));
@@ -31,7 +31,7 @@ int print_hex(va_list types, char buff[],
  */
 
 int print_HEX(va_list types, char buff[],
-	int flags, int width, int precision, int size);
+	int flags, int width, int precision, int size)
 {
 	return (print_hexanum(types, "0123456789ABCDEF", buff,
 		flags, 'X', width, precision, size));
@@ -70,7 +70,7 @@ int print_binary(va_list types, char buff[],
 		m /= 2;
 		a[j] = (n / m) % 2;
 	}
-	for (i = 0, sum = 0, count = 0; i < 32; i++)
+	for (j = 0, sum = 0, count = 0; j < 32; j++)
 	{
 		sum += a[j];
 		if (sum || j == 31)
@@ -97,7 +97,7 @@ int print_binary(va_list types, char buff[],
  */
 
 int print_octal(va_list types, char buff[],
-	int flags, int width, int precision, int size);
+	int flags, int width, int precision, int size)
 {
 	int j = BUFF_SIZE - 2;
 	unsigned long int num = va_arg(types, unsigned long int);
@@ -118,7 +118,7 @@ int print_octal(va_list types, char buff[],
 		num /= 8;
 	}
 
-	if (flags & F_HASH && init_num != 0)
+	if (flags & HASHTAG_FLAG && init_num != 0)
 		buff[j--] = '0';
 
 	j++;
@@ -139,7 +139,7 @@ int print_octal(va_list types, char buff[],
  */
 
 int int_print(va_list types, char buff[],
-	int flags, int width, int precision, int size);
+	int flags, int width, int precision, int size)
 {
 	int j = BUFF_SIZE - 2;
 	int is_negative = 0;
@@ -149,7 +149,7 @@ int int_print(va_list types, char buff[],
 	n = converting_num(n, size);
 
 	if (n == 0)
-		buffer[j--] = '0';
+		buff[j--] = '0';
 
 	buff[BUFF_SIZE - 1] = '\0';
 	num = (unsigned long int)n;

@@ -5,12 +5,12 @@
 
 /**
  * write_characters - Prints a string
- * @c: char types.
- * @buffer: Buffer array to handle print
- * @flags:  Calculates active flags.
- * @width: get width.
- * @precision: precision specifier
- * @size: Size specifier
+ * @ch: char types.
+ * @bfr: Buffer array to handle print
+ * @flag:  Calculates active flags.
+ * @w: get width.
+ * @pre: precision specifier
+ * @sz: Size specifier
  *
  * Return: Number of chars printed
  */
@@ -67,9 +67,9 @@ int number_writing(int ind, char bfr[], int flag, int w, int prec,
 	int i, padd_start = 1;
 
 	if (prec == 0 && ind == BUFF_SIZE - 2 && bfr[ind] == '0' && w == 0)
-		return (0); 
+		return (0);
 	if (prec == 0 && ind == BUFF_SIZE - 2 && bfr[ind] == '0')
-		bfr[ind] = padd = ' '; 
+		bfr[ind] = padd = ' ';
 	if (prec > 0 && prec < l)
 		padd = ' ';
 	while (prec > l)
@@ -113,7 +113,7 @@ int number_writing(int ind, char bfr[], int flag, int w, int prec,
  * @bfr: array to be printed
  * @flag: activated flag
  * @w: width
- * @pre: precision 
+ * @pre: precision
  * @sz: size
  *
  * Return: chars to print
@@ -145,7 +145,7 @@ int write_numb(int ispos, int ind, char bfr[],
  * @bfr: array of char
  * @ind: start index
  * @len: length
- * @w: width 
+ * @w: width
  * @flag: Flag activated
  * @padding: char for padding
  * @extra: extra char for padding
@@ -204,53 +204,45 @@ int pointer_writing(char bfr[], int ind, int len,
  * @bfr: char array
  * @flag: Flags activated
  * @w: width
- * @p: Precision 
+ * @p: Precision
  * @s: size
  *
  * Return: Number of printed characters
  */
 
-int write_unsigned(int negative, int x, char bfr[], int flag, int w, int p, int s)
+int write_unsigned(int negative, int x, char bfr[],
+		int flag, int w, int p, int s)
 {
-   
-    int length = BUFF_SIZE - x - 1, i = 0;
-    char padd = ' ';
+	int length = BUFF_SIZE - x - 1, i = 0;
+	char padd = ' ';
 
-    UNUSED(negative);
+	UNUSED(negative);
+	UNUSED(s);
 
-    UNUSED(s);
-
-    if (p == 0 && x == BUFF_SIZE - 2 && bfr[x] == '0')
-        return (0); 
-
-    if (p > 0 && p < length)
-        padd = ' ';
-
-    while (p > length)
-    {
-        bfr[--x] = '0';
-        length++;
-    }
-
-    if ((flag & ZERO_FLAG) && !(flag & MINUS_FLAG))
-        padd = '0';
-
-    if (w > length)
-    {
-        for (i = 0; i < w - length; i++)
-            bfr[i] = padd;
-
-        bfr[i] = '\0';
-
-        if (flag & MINUS_FLAG) 
-        {
-            return (write(1, &bfr[x], length) + write(1, &bfr[0], i));
-        }
-        else 
-        {
-            return (write(1, &bfr[0], i) + write(1, &bfr[x], length));
-        }
-    }
-
-    return (write(1, &bfr[x],length));
+	if (p == 0 && x == BUFF_SIZE - 2 && bfr[x] == '0')
+		return (0);
+	if (p > 0 && p < length)
+		padd = ' ';
+	while (p > length)
+	{
+		bfr[--x] = '0';
+		length++;
+	}
+	if ((flag & ZERO_FLAG) && !(flag & MINUS_FLAG))
+		padd = '0';
+	if (w > length)
+	{
+		for (i = 0; i < w - length; i++)
+			bfr[i] = padd;
+		bfr[i] = '\0';
+		if (flag & MINUS_FLAG)
+		{
+			return (write(1, &bfr[x], length) + write(1, &bfr[0], i));
+		}
+		else
+		{
+			return (write(1, &bfr[0], i) + write(1, &bfr[x], length));
+		}
+	}
+	return (write(1, &bfr[x], length));
 }

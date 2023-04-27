@@ -8,7 +8,7 @@
  * Return: 1 if yes, 0 if not
  */
 
-int isdigit_(int numb)
+int isdigit_(char numb)
 {
 	if (numb >= '0' && numb <= '9')
 		return (1);
@@ -26,7 +26,7 @@ int isdigit_(int numb)
 int hexa_appened(char asci, char arr[], int j)
 {
 	char map_to[] = "0123456789ABCDEF";
-	
+
 	if (asci < 0)
 		asci *= -1;
 
@@ -45,7 +45,7 @@ int hexa_appened(char asci, char arr[], int j)
  *
  * Return: 1 if c is printable, 0 otherwise
  */
- 
+
 int checkifprintable(char p)
 {
 	if (p >= 32 && p < 127)
@@ -55,7 +55,7 @@ int checkifprintable(char p)
 }
 
 /**
- * convertint_num - convert data type 
+ * converting_num - convert data type
  * @n: Num to convert
  * @s: data type to be converted to
  *

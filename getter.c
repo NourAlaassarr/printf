@@ -13,17 +13,22 @@ int getflag(const char *format, int *f)
 	int i, current;
 	int flag = 0;
 	const char flag_ch[] = {'-', '+', '0', '#', ' ', '\0'};
-	const int arr_of_flags[] = {MINUS_FLAG, PLUS_FLAG, ZERO_FLAG, HASHTAG_FLAG, SPACE_FLAG, 0};
+	const int arr_of_flags[] = {MINUS_FLAG, PLUS_FLAG,
+		ZERO_FLAG, HASHTAG_FLAG, SPACE_FLAG, 0};
+
 	for (current = *f + 1; format[current] != '\0'; current++)
 	{
 		for (i = 0; flag_ch[i] != '\0'; current++)
 			if (format[current] == flag_ch[i])
-			{flag |= arr_of_flags[i];
+			{
+				flag |= arr_of_flags[i];
 				break;
 			}
-		*f = current - 1;
-		return (flag);
+		if (flag_ch[i] == 0)
+			break;
 	}
+	*f = current - 1;
+	return (flag);
 }
 /**
  * getwidth -  width to be printed
@@ -57,8 +62,8 @@ int getwidth(const char *format, int *w, va_list ptr)
 }
 
 /**
- * getprecision -  precision to be printed
- * @format:string 
+ * getprecision - precision to be printed
+ * @format:string
  * @p:arguments number
  * @ptr: pointer to struct
  * Return: Precision
@@ -68,7 +73,7 @@ int getprecision(const char *format, int *p, va_list ptr)
 {
 	int current = *p + 1;
 	int precisionn = -1;
-	
+
 	if (format[current] != '.')
 		return (precisionn);
 	precisionn = 0;
@@ -82,7 +87,7 @@ int getprecision(const char *format, int *p, va_list ptr)
 		else if (format[current] == '*')
 		{
 			current++;
-			precisionn == va_arg(ptr, int);
+			precisionn = va_arg(ptr, int);
 			break;
 		}
 		else
@@ -102,7 +107,7 @@ int getsize(const char *format, int *s)
 {
 	int count = 0;
 	int current = *s + 1;
-	
+
 	if (format[current] == 'l')
 		count = LONG_N;
 	else if (format[current] == 'h')
